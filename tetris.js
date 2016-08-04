@@ -31,7 +31,7 @@ class App {
 			[[1,1], [1,1]] 		//O
 		];
 	}
-	isFinish() {
+	finish() {
 		for (let [i, row] of this.grid.entries()) {
 			let sum = row.reduce((a, b) => a + b);
 			if (sum == this.col * 2) {	//这行已经完成
@@ -115,6 +115,7 @@ class App {
 			}
 			if (key == 'bottom') {
 				if (i >= this.row - 1 || this.grid[i+1][j].value == 2) {
+					this.finish();		//如果向下完成，则进行一次检查
 					return true;
 				}
 			}
@@ -167,8 +168,8 @@ class App {
 	}
 	drawInfo() {
 		for (let block of this.blocks) {
-			block.i = Math.floor(this.row / 2) - 1;
-			block.j = this.col + 1;
+			block.i = Math.floor(this.row / 2);
+			block.j = this.col + 2;
 			for (let b of block.blocks) {
 				let color = block.color;
 				let harfUnit = this.unit / 2;
