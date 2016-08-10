@@ -2,11 +2,19 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Tetris</title>
 </head>
 <body>
-	<canvas style="float:right" id="canvas"></canvas>
-
+	<div>
+		<canvas id="canvas"></canvas>	
+	</div>
+	<div>
+		<button onclick="move('top')">↑</button>
+		<button onclick="move('left')">←</button>
+		<button onclick="move('bottom')">↓</button>
+		<button onclick="move('right')">→</button>
+	</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.9.1/polyfill.min.js"></script>
 <script src="./tetris.js"></script>
 <script>
@@ -14,6 +22,23 @@
 	var canvas = document.getElementById('canvas');
 	var app = new App(canvas);
 	app.init();
+
+	function move(direction) {
+		switch(direction){
+			case 'left': 	//left
+				app.move(-1, 0)
+				break;
+			case 'top': 	//up
+				app.rotate()
+				break;
+			case 'right': 	//right
+				app.move(1, 0)
+				break;
+			case 'bottom': 	//bottom
+				app.move(0, 1)
+				break;
+		}
+	}
 
 </script>
 </body>

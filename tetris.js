@@ -4,6 +4,8 @@ class App {
 		this.col = 12	//列数
 		this.unit = 10	//单位长度 1 grid == 10 unit
 
+		this.score = 0 	//得分
+
 		this.grid = [] 	// row * col
 		for (let i = 0; i < this.row; i++) {
 			let tmp = []
@@ -26,15 +28,19 @@ class App {
 			[[1,1,1], [0,1,0]],	//T
 			[[1,1,1], [1,0,0]],	//L
 			[[1,1,1], [0,0,1]],	//L'
-			[[1,1,0],[0,1,1]],	//Z
+			[[1,1,0], [0,1,1]],	//Z
 			[[0,1,1], [1,1,0]],	//Z'
 			[[1,1], [1,1]] 		//O
 		];
 	}
 	finish() {
 		for (let [i, row] of this.grid.entries()) {
-			let sum = row.reduce((a, b) => a + b);
+			let sum = 0;
+			for (let v of row) {
+				sum += v.value;
+			}
 			if (sum == this.col * 2) {	//这行已经完成
+				console.log("finish", i);
 				for (let j = i; j > 0 ; j--) {
 					this.grid[j] = this.grid[j - 1];
 				}
@@ -43,6 +49,8 @@ class App {
 					tmp.push({value: 0, color: '#fff'})
 				}
 				this.grid[0] = tmp;
+
+				this.score += 1;	//得分++
 			}
 		}
 	}
@@ -50,22 +58,16 @@ class App {
 	keyHandler(event) {
 		switch(event.keyCode){
 			case 37: 	//left
-				if (!this.collision(this.current, 'left')) {
-					this.move(-1, 0)
-				}
+				this.move(-1, 0)
 				break;
 			case 38: 	//up
 				this.rotate()
 				break;
 			case 39: 	//right
-				if (!this.collision(this.current, 'right')) {
-					this.move(1, 0)
-				}
+				this.move(1, 0)
 				break;
 			case 40: 	//bottom
-				if (!this.collision(this.current, 'bottom')) {
-					this.move(0, 1)
-				}
+				this.move(0, 1)
 				break;
 		}
 	}
@@ -79,11 +81,6 @@ class App {
 		}, 100);
 
 		this.runningInterval = setInterval(() => {
-			if (this.collision(this.current, 'bottom')) {
-				this.mapIn(this.current, 2)	//标记已完成状态
-				this.add();
-				return;
-			}
 			this.move(0, 1);
 		}, 1000);
 		
@@ -115,7 +112,6 @@ class App {
 			}
 			if (key == 'bottom') {
 				if (i >= this.row - 1 || this.grid[i+1][j].value == 2) {
-					this.finish();		//如果向下完成，则进行一次检查
 					return true;
 				}
 			}
@@ -142,6 +138,18 @@ class App {
 		this.mapIn(this.current);
 	}
 	move(h, v) {
+		if (h > 0 && this.collision(this.current, 'right')) {
+			return;
+		}
+		if (h < 0 && this.collision(this.current, 'left')) {
+			return;
+		}
+		if (v > 0 && this.collision(this.current, 'bottom')) {
+			this.mapIn(this.current, 2)
+			this.finish();		//如果向下完成，则进行一次检查
+			this.add();
+			return;
+		}
 		this.mapOut(this.current);
 		this.current.i += v;
 		this.current.j += h;
