@@ -98,7 +98,7 @@ class App {
 		let idx = Math.floor(Math.random() * this.types.length)
 		this.current = this.blocks.shift();
 		if (this.current) {
-			this.current.i = -2;
+			this.current.i = -1;
 			this.current.j = Math.floor(this.col / 2);
 		}
 		this.blocks.push(new Block(0, 0, this.types[idx], this._randomColor()));
