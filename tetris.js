@@ -54,7 +54,19 @@ class App {
 			}
 		}
 	}
-
+	gameover() {
+		let gameover = false;
+		for (let item of this.grid[0]) {	//检测第一行，如果有砖块，表示游戏结束，在每次finish后检测
+			if (item.value == 2) {
+				gameover = true;
+			}
+		}
+		if (gameover) {	//游戏结束处理
+			clearInterval(this.interval);
+			clearInterval(this.runningInterval);
+		}
+		return gameover;
+	}
 	keyHandler(event) {
 		switch(event.keyCode){
 			case 37: 	//left
@@ -146,7 +158,11 @@ class App {
 		}
 		if (v > 0 && this.collision(this.current, 'bottom')) {
 			this.mapIn(this.current, 2)
-			this.finish();		//如果向下完成，则进行一次检查
+			this.finish();			//如果向下完成，则进行一次检查
+			if (this.gameover()) {	//finish()后，检查是否游戏结束
+				//游戏结束
+				return;
+			}	
 			this.add();
 			return;
 		}
