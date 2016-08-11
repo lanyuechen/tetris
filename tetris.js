@@ -175,6 +175,7 @@ class App {
 		}
 	}
 	drawInfo() {
+		//绘制下一个砖块
 		for (let block of this.blocks) {
 			block.i = Math.floor(this.row / 2);
 			block.j = this.col + 2;
@@ -192,6 +193,9 @@ class App {
 				this.context.translate(-0.5, -0.5);
 			}
 		}
+		//绘制得分
+		this.context.font = '14px Arial';
+		this.context.fillText(this.score, this.col * this.unit + 15, this.row / 2 * this.unit + 30);
 	}
 	draw() {
 		for (let [i, row] of this.grid.entries()) {
