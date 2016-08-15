@@ -4,23 +4,40 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Tetris</title>
+	<link rel="stylesheet" href="tetris.css">
 </head>
 <body>
-	<div>
-		<canvas id="canvas"></canvas>	
+	<div class="container">
+		<h2>Tetris-v1.0</h2>
+		<div style="text-align:center;">
+			<canvas id="canvas"></canvas>	
+		</div>
+		<div class="btn-group" style="text-align:center;">
+			<div class="button">
+				<button onclick="move('top')">上</button>
+			</div>
+			<div class="button">
+				<button onclick="move('right')">右</button>
+			</div>
+			<div class="button">
+				<button onclick="move('left')">左</button>
+			</div>
+			<div class="button">
+				<button onclick="move('bottom')">下</button>
+			</div>
+		</div>
 	</div>
-	<div>
-		<button onclick="move('top')">↑</button>
-		<button onclick="move('left')">←</button>
-		<button onclick="move('bottom')">↓</button>
-		<button onclick="move('right')">→</button>
-	</div>
+	
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.9.1/polyfill.min.js"></script> -->
 <script src="./tetris.js"></script>
 <script>
 
 	var canvas = document.getElementById('canvas');
-	var app = new App(canvas);
+	var app = new App(canvas, {
+		row: 18,
+		col: 9,
+		unit: 15
+	});
 	app.init();
 
 	function move(direction) {

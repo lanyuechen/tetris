@@ -1,0 +1,92 @@
+html, body {
+  font-family: Asial, sans-serif;
+  background: #ccd0d4;
+  margin: 0;
+}
+body {
+  padding: 15px;
+}
+.container {
+  position: relative;
+  padding: 30px 15px;
+  border-radius: 5px;
+  box-shadow: 0 10px 15px -4px rgba(0, 0, 0, 0.2),
+              inset 0 -3px 4px -1px rgba(0, 0, 0, 0.2),
+              0 -10px 15px -1px rgba(255, 255, 255, 0.6),
+              inset 0 3px 4px -1px rgba(255, 255, 255, 0.2),
+              inset 0 0 5px 1px rgba(255, 255, 255, 0.8),
+              inset 0 20px 30px 0 rgba(255, 255, 255, 0.2);
+}
+.container h2 {
+  margin: 0;
+  position: absolute;
+  left: 22px;
+  top: 10px;
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.4);
+  text-shadow: 1px 1px 3px #ccd0d4, 0 0 0 rgba(0, 0, 0, 0.8), 1px 1px 4px white;
+}
+canvas {
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: inset 0 -8px 30px 1px rgba(255, 255, 255, 0.9),
+              inset 0 8px 25px 0 rgba(0, 0, 0, 0.4),
+              inset 0 0 10px 1px rgba(255, 255, 255, 0.6);
+}
+
+/* 按键样式 */
+.btn-group {
+  margin: 70px auto 0 auto;
+  transform:rotate(45deg);
+  width: 300px;
+  zoom: 0.5;
+}
+
+.button {
+  transform:rotate(-45deg);
+  display: inline-block;
+  background: #ccd0d4;
+  position: relative;
+  height: 140px;
+  width: 140px;
+  border-radius: 70px;
+}
+.button:before {
+  content: "";
+  box-shadow: 0 0 17.5px 8.75px white;
+  border-radius: 118.3px;
+  background: white;
+  position: absolute;
+  margin-left: -50.4px;
+  margin-top: -50.4px;
+  opacity: 0.2;
+  height: 100.8px;
+  width: 100.8px;
+  left: 50%;
+  top: 50%;
+}
+.button > button {
+  outline: none;
+  border: none;
+  box-shadow: 0 15px 25px -4px rgba(0, 0, 0, 0.5), inset 0 -3px 4px -1px rgba(0, 0, 0, 0.2), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 3px 4px -1px rgba(255, 255, 255, 0.2), inset 0 0 5px 1px rgba(255, 255, 255, 0.8), inset 0 20px 30px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 1px 1px 3px #ccd0d4, 0 0 0 rgba(0, 0, 0, 0.8), 1px 1px 4px white;
+  border-radius: 96.32px;
+  position: absolute;
+  background: #ccd0d4;
+  margin-left: -48.16px;
+  margin-top: -48.16px;
+  display: block;
+  height: 96.32px;
+  width: 96.32px;
+  text-align: center;
+  line-height: 96.32px;
+  left: 50%;
+  top: 50%;
+  font-weight: 900;
+  font-size: 42px;
+  color: rgba(0, 0, 0, 0.4);
+}
+.button button:active {
+  box-shadow: 0 15px 25px -4px rgba(0, 0, 0, 0.4), inset 0 -8px 30px 1px rgba(255, 255, 255, 0.9), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 8px 25px 0 rgba(0, 0, 0, 0.4), inset 0 0 10px 1px rgba(255, 255, 255, 0.6);
+}

@@ -1,8 +1,8 @@
 class App {
-	constructor(canvas) {
-		this.row = 16	//行数
-		this.col = 12	//列数
-		this.unit = 10	//单位长度 1 grid == 10 unit
+	constructor(canvas, conf = {}) {
+		this.row = conf.row || 16	//行数
+		this.col = conf.col || 9	//列数
+		this.unit = conf.unit || 10	//单位长度 1 grid == 10 unit
 
 		this.score = 0 	//得分
 
@@ -10,13 +10,13 @@ class App {
 		for (let i = 0; i < this.row; i++) {
 			let tmp = []
 			for (let j = 0; j < this.col; j++) {
-				tmp.push({value: 0, color: '#fff'})
+				tmp.push({value: 0, color: '#000'})
 			}
 			this.grid.push(tmp)
 		}
 
 		this.canvas = canvas 	//画布
-		this.canvas.width = this.col * this.unit + 1 + 60	
+		this.canvas.width = this.col * this.unit + 1 + this.unit * 6
 		this.canvas.height = this.row * this.unit + 1	//+1是因为画图时为了避免1像素模糊，向右下各移动了0.5，不+1的话右侧和下侧的线将会被覆盖
 		this.context = this.canvas.getContext('2d')
 		
@@ -46,7 +46,7 @@ class App {
 				}
 				let tmp = []
 				for (let j = 0; j < this.col; j++) {
-					tmp.push({value: 0, color: '#fff'})
+					tmp.push({value: 0, color: '#000'})
 				}
 				this.grid[0] = tmp;
 
@@ -115,25 +115,27 @@ class App {
 		}
 		this.blocks.push(new Block(0, 0, this.types[idx], this._randomColor()));
 	}
-	collision(block, key) {
+	collision(block, h, v) {
 		for (let b of block.blocks) {
 			let i = block.i + b.i;
 			let j = block.j + b.j;
-			if (i < 0) {
-				return false;
-			}
-			if (key == 'bottom') {
-				if (i >= this.row - 1 || this.grid[i+1][j].value == 2) {
+			if (v > 0) {
+				if ((i+1 >= 0 && i+1 < this.row && this.grid[i+1][j].value == 2) || i+1 >= this.row) {
+					this.mapIn(this.current, 2)
+					this.finish();			//如果向下完成，则进行一次检查
+					if (!this.gameover()) {	//finish()后，检查是否游戏结束
+						this.add();
+					}
 					return true;
 				}
 			}
-			if (key == 'left') {
-				if (j <= 0 || this.grid[i][j-1].value == 2) {
-					return true;
+			if (h < 0) {
+				if ((i >= 0 && j-1>=0 && j-1 < this.col && this.grid[i][j-1].value == 2) || j <= 0) {
+					return true
 				}
 			}
-			if (key == 'right') {
-				if (j >= this.col - 1 || this.grid[i][j+1].value == 2) {
+			if (h > 0) {
+				if ((i >= 0 && j+1>=0 && j+1 < this.col && this.grid[i][j+1].value == 2) || j+1 >= this.col) {
 					return true;
 				}
 			}
@@ -141,6 +143,18 @@ class App {
 		return false;
 	}
 	rotate() {
+		//验证是否可以旋转
+		for (let block of this.current.blocks) {
+			let i = this.current.i + block.j;
+			let j = this.current.j - block.i;
+			if (i < 0 || i > this.row - 1 || j < 0 || j > this.col - 1) {	//出界
+				return false;
+			}
+			if (this.grid[i][j].value == 2) {	//与其他砖块冲突
+				return false;
+			}
+		}
+		
 		this.mapOut(this.current);
 		for (let block of this.current.blocks) {
 			let tmp = -block.i;
@@ -150,20 +164,7 @@ class App {
 		this.mapIn(this.current);
 	}
 	move(h, v) {
-		if (h > 0 && this.collision(this.current, 'right')) {
-			return;
-		}
-		if (h < 0 && this.collision(this.current, 'left')) {
-			return;
-		}
-		if (v > 0 && this.collision(this.current, 'bottom')) {
-			this.mapIn(this.current, 2)
-			this.finish();			//如果向下完成，则进行一次检查
-			if (this.gameover()) {	//finish()后，检查是否游戏结束
-				//游戏结束
-				return;
-			}	
-			this.add();
+		if (this.collision(this.current, h, v)) {
 			return;
 		}
 		this.mapOut(this.current);
@@ -203,7 +204,7 @@ class App {
 
 				this.context.translate(0.5, 0.5);	//解决1px模糊问题
 				this.context.fillStyle = color;
-				this.context.strokeStyle = "#000";
+				this.context.strokeStyle = "#aaa";
 				this.context.strokeRect(x - harfUnit, y - harfUnit, this.unit, this.unit)
 				this.context.fillRect(x - harfUnit, y - harfUnit, this.unit, this.unit)
 				this.context.translate(-0.5, -0.5);
@@ -221,14 +222,14 @@ class App {
 		}
 	}
 	drawPix(i, j, pix) {
-		let color = pix.value ? pix.color : '#fff';
+		let color = pix.value ? pix.color : '#000';
 		let harfUnit = this.unit / 2;
 		let x = j * this.unit + harfUnit;
 		let y = i * this.unit + harfUnit;
 		
 		this.context.translate(0.5, 0.5);	//解决1px模糊问题
 		this.context.fillStyle = color;
-		this.context.strokeStyle = "#000";
+		this.context.strokeStyle = "#aaa";
 		this.context.strokeRect(x - harfUnit, y - harfUnit, this.unit, this.unit)
 		this.context.fillRect(x - harfUnit, y - harfUnit, this.unit, this.unit)
 		this.context.translate(-0.5, -0.5);
@@ -240,11 +241,7 @@ class App {
 		this.context.restore();
 	}
 	_randomColor() {
-		let color = '#';
-		for (let i = 0; i < 6; i++) {
-			color += '01234567890abcdef'[Math.floor(Math.random()*16)];
-		}
-		return color;
+		return '#'+('00000'+(Math.random()*0xffffff<<0).toString(16)).slice(-6);
 	}
 }
 class Block {
